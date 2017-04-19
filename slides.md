@@ -203,10 +203,6 @@ Problem: these shapefiles are huge! A dataset of ZIP code shapefiles is over 1.3
 <div class="fragment" />
 * We'll need to use a [geographic information system](https://en.wikipedia.org/wiki/Geographic_information_system) (GIS) like [ArcGIS](https://www.arcgis.com/features/index.html) or [QGIS](http://qgis.org/en/site/) to edit & compress the shapefiles
 
-----
-
-## QGIS in action
-
 ![](img/qgis.png)
 
 ----
@@ -224,7 +220,7 @@ We can convert shapefiles to geoJSON using the [Geospatial Data Abstraction Libr
 
 ----  ----
 
-# 6. Map Time
+# 5. Map Time
 
 ----
 
