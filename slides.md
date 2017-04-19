@@ -7,7 +7,7 @@
 
 created by [vivshaw](https://vivshaw.github.io/) | 2017-04-19 | [online][1] | [src][2]
 
-[folium](3) | [leaflet](4) | [odyssey](5)
+[folium][3] | [leaflet][4] | [odyssey][5]
 
 
 [1]: https://vivshaw.github.io/4-19-public-data-talk/
