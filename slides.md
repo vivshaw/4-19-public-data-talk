@@ -173,6 +173,11 @@ Out[1]:
 ## Lemme throw some plots at ya
 
 ![job growth histogram](img/avg_emp_histo.png)
+
+----
+
+## Lemme throw some plots at ya
+
 ![job growth x mean wage](img/avg_emp_x_wage.png)
 
 ----  ----
@@ -197,6 +202,10 @@ Problem: these shapefiles are huge! A dataset of ZIP code shapefiles is over 1.3
 
 <div class="fragment" />
 * We'll need to use a [geographic information system](https://en.wikipedia.org/wiki/Geographic_information_system) (GIS) like [ArcGIS](https://www.arcgis.com/features/index.html) or [QGIS](http://qgis.org/en/site/) to edit & compress the shapefiles
+
+----
+
+## QGIS in action
 
 ![](img/qgis.png)
 
@@ -259,7 +268,7 @@ Pros:
 Cons:
 * You have to be a web developer
 
----
+----
 
 ## Telling the story with [odyssey.js](https://cartodb.github.io/odyssey.js/)
 
