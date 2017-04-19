@@ -62,7 +62,9 @@ Ulterior motive: 'Yay, a chance to revisit my old stomping grounds & build somet
 
 # Where are the hottest spots for tech-sector employment in 2016?
 
-Perhaps you are...
+----
+
+## Perhaps you are...
 
 <div class="fragment" />
 ...a startup, looking to avoid the high costs and market saturation of SF or NY?
@@ -94,19 +96,19 @@ The Bureau of Labor Statistics maintains a comprehensive [Occupational Employmen
 
 ## Scrub-a-dub-dub, data cleaning time!
 
-We'll use Pandas, because it's awesome.
+We'll use Pandas, because it's awesome. 
 
 ```
 xl = pd.ExcelFile(filename)
 df = xl.parse(xl.sheet_names[0])
 
 # Drop non-tech sector jobs
-bls = df.drop(df[df.OCC_CODE != "15-0000"].index)
+df = df.drop(df[df.OCC_CODE != "15-0000"].index)
 # Drop any rows with missing data
-bls = bls.drop(bls[(bls.A_MEAN == '*') | (bls.JOBS_1000 == '**') | (bls.TOT_EMP == '**')].index)
+df = df.drop(bls[(bls.A_MEAN == '*') | (bls.JOBS_1000 == '**') | (bls.TOT_EMP == '**')].index)
 
 # Return only chosen columns
-return bls['AREA', 'AREA_NAME', 'TOT_EMP', 'JOBS_1000', 'A_MEAN']
+return df['AREA', 'AREA_NAME', 'TOT_EMP', 'JOBS_1000', 'A_MEAN']
 ```
 
 ----
@@ -124,145 +126,48 @@ bls_merged = reduce(inner_join_by_area, bls_data)
 
 ----
 
-## fab setup.revealjs
+## Our target indicator: average job growth
 
-*Optionally:*
- * Create github repo
- * Download npm libs
+Let's just grab our total employment in the sector for each year, subtract, and do a quick average...
 
-*When running again (also optional):*
- * Re-install reveal.js codebase
+```
+bls_merged['2016_EMP_GROWTH'] = tot_emp['2016_TOT_EMP'] - tot_emp['2015_TOT_EMP']
+bls_merged['2015_EMP_GROWTH'] = tot_emp['2015_TOT_EMP'] - tot_emp['2014_TOT_EMP']
+bls_merged['AVG_EMP_GROWTH'] = (tot_emp['2016_EMP_GROWTH'] + tot_emp['2015_EMP_GROWTH']) / 2
 
-----
-
-[howto](https://github.com/theno/fabsetup/blob/master/howtos/revealjs.md)
-
-----
-
-## Boilerplate File Structure
-
-```sh
-~/repos/my_presi> tree
-.
-├── .git/
-├── .gitignore
-│
-├── README.md   <-- Short description and usage
-│
-├── slides.md   <-- All slides are defined here
-├── index.html  <-- Configuration
-├── img/
-│   └── thanks.jpg  <-- good place for images
-│
-└── reveal.js/   <--.
-    ├── css/         `-- reveal.js code "hidden" in a subdir
-    ├── js/               (keeps the basedir clean)
-    ├── plugin/
-    ...
-    ├── img -> ../img                \
-    ├── reveal.js -> ../reveal.js     |_ symbolic links in order
-    ├── slides.md -> ../slides.md     |   to run `npm start`
-    └── index.html -> ../index.html  /
 ```
 
 ----
 
-*template features*
+## Preliminary EDA
 
-----
+We can already start to see some neat stuff. Let's look at our dataframe:
 
-## Plugins Built-In
-
-All the built-in plugins are enabled in the __`index.html`__:
-* __[marked.js, markdown.js][10]__: Markdown support
-* __[highlight.js][11]__: Code syntax highlighting
-* __zoom.js__: Zoom in and out with `ALT+click`
-* __[notes.js][13]__: Speaker notes
-* __[math.js][14]__: Formatting math expressions
-
-[10]: https://github.com/hakimel/reveal.js/#markdown
-[11]: https://github.com/hakimel/reveal.js/#code-syntax-highlighting
-[13]: https://github.com/hakimel/reveal.js/#speaker-notes
-[14]: https://github.com/hakimel/reveal.js/#mathjax
-
-----
-
-## Additional Plugins
-
-This additional plugins will be installed and set up, too:
-* __[menu.js][15]__: Slideout menu (slide index, change theme and transition)
-* __[toc-progress.js][16]__: *"LaTeX Beamer-like progress indicator"*
-* __[title-footer.js][17]__: *"Footer showing title of presentation"*
-
-[15]: https://github.com/denehyg/reveal.js-menu#revealjs-menu
-[16]: https://github.com/e-gor/Reveal.js-TOC-Progress
-[17]: https://github.com/e-gor/Reveal.js-Title-Footer
-
-----
-
-## Customizations in reveal.js
-
-* Don't Capitalize Titles (NO FULL UPPERCASE HEADINGS)
-* Images are displayed without border
-
-----
-
-## Special Markdown Slide dividers
-
-*Two dividers exist:*
-* New horizontal slide: `\n----  ----\n`
-* New vertical slide: `\n----\n`
-
-*Win-win:*
-* ["Raw"][18] `slides.md`: Easy to read and edit
-* Horizontal lines in [rendered Markdown][19]: Easy to read, too
-
-[18]: https://raw.githubusercontent.com/theno/revealjs_template/master/slides.md
-[19]: https://github.com/theno/revealjs_template/blob/master/slides.md
-
-----
-
-## Create PDF
-
-*cumbersome.*
-* With [decktape](https://github.com/astefanutti/decktape)
-
-```sh
-cd ~/bin/decktape/active && \                                               #
-./phantomjs decktape.js --size 1280x800 URL ~/repos/my_presi/my_presi.pdf
+```
+In[1]: tot_emp[['AREA', 'AREA_NAME_x', 'AVG_EMP_GROWTH']].sort_values('AVG_EMP_GROWTH', ascending=False)
+Out[1]: 
+      AREA                                          AREA_NAME  AVG_EMP_GROWTH
+43   41940                 San Jose-Sunnyvale-Santa Clara, CA          8605.0
+227  35084                Newark, NJ-PA Metropolitan Division          8470.0
+90   12060                  Atlanta-Sandy Springs-Roswell, GA          8385.0
+42   41884  San Francisco-Redwood City-South San Francisco...          7940.0
+30   31084  Los Angeles-Long Beach-Glendale, CA Metropolit...          5355.0
+21   38060                        Phoenix-Mesa-Scottsdale, AZ          5040.0
+353  42644  Seattle-Bellevue-Everett, WA Metropolitan Divi...          4595.0
+205  16740                  Charlotte-Concord-Gastonia, NC-SC          4440.0
+314  19124      Dallas-Plano-Irving, TX Metropolitan Division          4130.0
+309  12420                              Austin-Round Rock, TX          3980.0
+193  28140                                 Kansas City, MO-KS          3300.0
+186  33460            Minneapolis-St. Paul-Bloomington, MN-WI          3235.0
+...
 ```
 
-* Or just print the `slides.md` rendered by github into a PDF:
-  https://github.com/theno/revealjs_template/blob/master/slides.md
-
----
-
-* [Printing with chromium](https://github.com/hakimel/reveal.js#pdf-export)
-  (or chrome) does not work well:
-  https://theno.github.io/revealjs_template/?print-pdf#/
-
-Note:
-URL can be of:
-* localhost:8000
-* github.io page
-
 ----
 
-## Shortcut
+## Lemme throw some plots at ya
 
-Checkout the template presentation repo:
-```sh
-git clone https://github.com/theno/revealjs_template  ~/repos/my_presi
-```
-
-Then:
-* Adjust `<title>reveal.js template</title>` in __`index.html`__
-* Edit __`slides.md`__
-* Add symbolic link:
-  ```sh
-  cd ~/repos/my_presi  &&  ln -snf ../reveal.js  reveal.js/reveal.js
-  ```
-
+![](img/avg_emp_histo.jpg)
+![](img/avg_emp_x_wage.jpg)
 
 ----  ----
 
