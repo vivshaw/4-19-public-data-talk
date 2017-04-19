@@ -154,7 +154,7 @@ for idx in reversed(idx_to_delete):
         
 geojson.save('data/msa_shrank.json')
 
-msa_map = folium.Map(location=[37.769959, -122.448679], tiles='Stamen Toner', zoom_start=7)
+msa_map = folium.Map(location=[37.769959, -122.448679], tiles='Stamen Toner', zoom_start=5)
 msa_map.choropleth(geo_path='data/msa_shrank.json', data=msaframe,
              columns=['AREA', 'AVG_EMP_GROWTH'],
              key_on='feature.properties.CBSAFP',
