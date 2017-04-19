@@ -51,7 +51,7 @@ msa_to_zips, zip_to_msa = msa_data_from_xls('data/fs11_gpci_by_msa-zip.xls')
 
 # Load up our bls data from xls files
 datafiles = ['data/MSA_M2016_dl.xlsx', 'data/MSA_M2015_dl.xlsx', 'data/MSA_M2014_dl.xlsx']
-bls_data = list(map(lambda x: (x[5:9], load_bls(x)), datafiles))
+bls_data = list(map(lambda x: (x[10:14], load_bls(x)), datafiles))
 
 # Rename our columns by year
 rename_column = lambda x: x[1].rename(columns={'TOT_EMP': x[0] + '_TOT_EMP',
@@ -101,11 +101,10 @@ def zips_or_null(x):
             return msa_to_zips[fixed_keys[x]]
         return 'No zips'
 
-tot_emp_zips = tot_emp
-tot_emp_zips['ZIPS'] = tot_emp['AREA'].apply(zips_or_null)
+tot_emp['ZIPS'] = tot_emp['AREA'].apply(zips_or_null)
 
 # Drop entries without zips
-tot_emp_zips = tot_emp_zips.drop(tot_emp_zips[tot_emp_zips.ZIPS == 'No zips'].index)
+tot_emp = tot_emp.drop(tot_emp[tot_emp.ZIPS == 'No zips'].index)
 
 def dictify_by_zip(data):
     zip_to_avg = {}
@@ -116,44 +115,7 @@ def dictify_by_zip(data):
             
     return zip_to_avg
     
-zip_to_avg_growth = dictify_by_zip(tot_emp_zips)
-
-geo_path = r'data/zips.json'
-geojson = pygeoj.load(filepath=geo_path)
-
-drop = ['ALAND10', 'AWATER10', 'CLASSFP10', 'FUNCSTAT10', 'GEOID10',
-        'INTPTLAT10', 'INTPTLON10', 'MTFCC10']
-missing_zips = []
-for x in range(len(geojson)):
-    feature = geojson[x]
-    zipcode = feature.properties['ZCTA5CE10']
-    if zipcode in zip_to_avg_growth:
-        growth = zip_to_avg_growth[zipcode]
-        for key in drop:
-            if key in feature.properties:
-                del geojson[x].properties[key]
-        geojson[x].properties['growth'] = growth
-    else:
-        missing_zips += [x]
-        
-for idx in reversed(missing_zips):
-    del geojson[idx]
-        
-geojson.save('data/zips_shrank.json')
-
-
-zipframe = pd.Series(zip_to_avg_growth, name='AVG_EMP_GROWTH')
-zipframe.index.name = 'ZIP'
-zipframe = zipframe.reset_index()
-
-map = folium.Map(location=[37.769959, -122.448679], tiles='Stamen Toner', zoom_start=7)
-map.choropleth(geo_path='data/zips_shrank.json', data=zipframe,
-               columns=['ZIP', 'AVG_EMP_GROWTH'],
-               key_on='feature.properties.ZCTA5CE10',
-               fill_color='RdBu', fill_opacity=0.7, line_opacity=0.2,
-               threshold_scale=[-1134, -500, 0, 2000, 5000, 9514],
-               legend_name='Avg tech industry job growth (# positions added)')
-map.save('avg_emp_growth3.html')
+zip_to_avg_growth = dictify_by_zip(tot_emp)
 
 msa_to_avg_growth = {}
 for k, v in zip_to_avg_growth.items():
@@ -163,16 +125,15 @@ msaframe = pd.Series(msa_to_avg_growth, name='AVG_EMP_GROWTH')
 msaframe.index.name = 'AREA'
 msaframe = msaframe.reset_index()
 
-msa_geo_path = r'data/msa.json'
-msa_geojson = pygeoj.load(filepath=msa_geo_path)
+geo_path = r'data/msa.json'
+geojson = pygeoj.load(filepath=geo_path)
 
 drop = ['MEMI', 'AWATER', 'MTFCC', 'CSAFP', 'INTPTLAT', 'INTPTLON', 'ALAND',
         'LSAD', 'GEOID', 'NAMELSAD']
-        
+idx_to_delete = []
 missing_msas = []
-miss_2 = []
-for x in range(len(msa_geojson)):
-    feature = msa_geojson[x]
+for x in range(len(geojson)):
+    feature = geojson[x]
     msa = feature.properties['CBSAFP']
     fixes = {'31080': '31100'}
     if msa in fixes:
@@ -182,16 +143,16 @@ for x in range(len(msa_geojson)):
         growth = msa_to_avg_growth[msa]
         for key in drop:
             if key in feature.properties:
-                del msa_geojson[x].properties[key]
-        msa_geojson[x].properties['growth'] = growth
+                del geojson[x].properties[key]
+        geojson[x].properties['growth'] = growth
     else:
-        missing_msas += [x]
-        miss_2 += [feature.properties['CBSAFP']]
+        idx_to_delete += [x]
+        missing_msas += [feature.properties['CBSAFP']]
         
-for idx in reversed(missing_msas):
-    del msa_geojson[idx]
+for idx in reversed(idx_to_delete):
+    del geojson[idx]
         
-msa_geojson.save('data/msa_shrank.json')
+geojson.save('data/msa_shrank.json')
 
 msa_map = folium.Map(location=[37.769959, -122.448679], tiles='Stamen Toner', zoom_start=7)
 msa_map.choropleth(geo_path='data/msa_shrank.json', data=msaframe,
@@ -200,5 +161,5 @@ msa_map.choropleth(geo_path='data/msa_shrank.json', data=msaframe,
              fill_color='RdBu', fill_opacity=0.7, line_opacity=0.2,
              threshold_scale=[-1134, -500, 0, 2000, 5000, 9514],
              legend_name='Avg tech industry job growth (# positions added)')
-msa_map.save('avg_emp_growth_msa.html')
+msa_map.save('folium.html')
 
