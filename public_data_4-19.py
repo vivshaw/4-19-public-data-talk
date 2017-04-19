@@ -161,5 +161,5 @@ msa_map.choropleth(geo_path='data/msa_shrank.json', data=msaframe,
              fill_color='RdBu', fill_opacity=0.7, line_opacity=0.2,
              threshold_scale=[-1134, -500, 0, 2000, 5000, 9514],
              legend_name='Avg tech industry job growth (# positions added)')
-msa_map.save('folium-app/folium.html')
+msa_map.save('folium-app/index.html')
 
