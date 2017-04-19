@@ -3,7 +3,7 @@
 # Data Mashups
 <!-- .element: class="no-toc-progress" --> <!-- slide not in toc progress bar -->
 
-## Remix Your Way to Interactive Visualizations
+## <span style="color: #ffa3d5"> Remix</span> Your Way to Interactive Visualizations
 
 created by [vivshaw](https://vivshaw.github.io/) | 2017-04-19 | [online][1] | [src][2]
 
