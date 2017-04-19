@@ -1,7 +1,5 @@
 var map = L.map('map', {attributionControl: false}).setView([37.8, -96], 5),
-	grades = [-1134, -400, -50, 1, 2500, 4000, 5500, 9514],
-	colors = ['#800026', '#BD0026', '#E31A1C', '#FC4E2A', '#FD8D3C', '#FEB24C', '#FED976', '#FFEDA0'];
-// data range: -1134 - 9514
+	grades = [-1134, -400, -50, 1, 2500, 4000, 5500, 9514];
 
 var positiveColorScale = d3.scaleSequential(d3.interpolateBlues).domain([0, 9514])
 var negativeColorScale = d3.scaleSequential(d3.interpolateReds).domain([0, -1134])
@@ -24,8 +22,8 @@ legend.onAdd = function (map) {
 
 legend.update = function (props) {
 	this._div.innerHTML = '<h4 class="display-4">Tech Job Growth <small class="text-muted">(3-year avg.)</small></h4>' +  (props ?
-		'<div class="lead"><b>' + props.NAME + '</b><br /><b>' + props.growth + '</b> positions ' + ((props.growth >= 0) ? 'added' : 'lost') + '</div>'
-		: '<div class="lead">Hover over an MSA for info<br />&nbsp</div>');
+		'<div class="lead"><b>' + props.NAME + '</b><br /><b>' + props.growth + '</b> positions ' + ((props.growth >= 0) ? 'added' : 'lost') + '<br /><b>$' + props.wage + '</b> average tech sector salary (USD)</div>'
+		: '<div class="lead"><br />Hover over an MSA for info<br />&nbsp</div>');
 };
 
 legend.addTo(map);
