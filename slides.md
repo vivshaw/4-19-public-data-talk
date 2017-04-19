@@ -1,62 +1,52 @@
 <!-- .slide: data-state="no-toc-progress" --> <!-- don't show toc progress bar on this slide -->
 
-# REVEAL.JS TEMPLATE
+# Data Mashups
 <!-- .element: class="no-toc-progress" --> <!-- slide not in toc progress bar -->
 
-## [reveal.js][3] presentation written in [markdown][4] set up with [fabric][5] & [fabsetup][6]
+## Remix Your Way to Interactive Visualizations
 
-created by [theno](https://github.com/theno) | 2017-01-05 | [online][1] | [src][2]
+created by [vivshaw](https://vivshaw.github.io/) | 2017-04-19 | [online][1] | [src][2]
 
 
-[1]: https://theno.github.io/revealjs_template
-[2]: https://github.com/theno/revealjs_template
-
-[3]: http://lab.hakim.se/reveal-js/
-[4]: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
-[5]: http://www.fabfile.org/
-[6]: https://github.com/theno/fabsetup
-
+[1]: https://vivshaw.github.io/public-data-talk/
+[2]: https://github.com/vivshaw/public-data-talk/
 
 ----  ----
 
-# 1. reveal.js
+# 1. Your humble host...
 
 ----
 
-## reveal.js
+## ...Hannah Vivian Shaw
 
-> "A framework for easily creating __beautiful presentations__ using HTML."
+> "Who the heck is she?"
 >
-> -- <cite>https://github.com/hakimel/reveal.js</cite>
+> -- <cite>You guys, probably</cite>
 
 <div class="fragment" />
 
-* It's basically a static website displayed in a *browser*
-  * Works better with *Chrome* than *Firefox*
+* BA in Economics & Philosophy, UVM
+  * Secret identity: software engineer!
+  * <!-- .element: class="fragment" --> `let interests = (econ_stats, code) => data_science`
 * <!-- .element: class="fragment" -->
-  __Markdown support__ -> *easy editing*:
-  * <!-- .element: class="fragment" --> Don't bother with HTML syntax
-  * <!-- .element: class="fragment" --> Write slides in a markdown file
+  __Don't be afraid to say 'Hi'!__
+  * <!-- .element: class="fragment" --> [vivshaw.github.io](https://vivshaw.github.io/)
+  * <!-- .element: class="fragment" --> [twitter.com/irreduce](https://vivshaw.github.io/)
 
 ----
 
-## reveal.js supports Markdown
+## The topic at hand
 
-Writing slides in Markdown is easy:
+My initial thought: A natural fit for business - public economic datasets.
+Ulterior motive: 'Yay, a chance to revisit my old stomping grounds & build something neat!'
 
-```markdown
-## reveal.js
+Large amounts of pristine data
 
-> "A framework for easily creating beautiful presentations using HTML."
->
-> -- <cite>https://github.com/hakimel/reveal.js</cite>
-
-* It's basically a website displayed in a browser
-* Works better with Chrome than Firefox
-* Markdown support -> easy editing:
-  * Don't bother with xml syntax
-  * Write slides in a markdown file
-```
+* Domestic data
+  * Bureau of Labor Statistics
+  * Federal Reserve
+* International data
+  * World Bank
 
 ----
 
