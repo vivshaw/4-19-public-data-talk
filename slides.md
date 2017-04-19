@@ -41,7 +41,7 @@ created by [vivshaw](https://vivshaw.github.io/) | 2017-04-19 | [online][1] | [s
 Initial thought: Public economic datasets - a natural fit for business. There's lots of comprehensive, clean data out there with direct business relevance.
 
 <div class="fragment" />
-Ulterior motive: 'Yay, a chance to revisit my old stomping grounds & build something neat!'
+Ulterior motive: 'Yay, a chance to revisit my old stomping grounds & build some neat visualizations!'
 
 ----
 
@@ -102,7 +102,7 @@ We'll use Pandas, because it's awesome.
 xl = pd.ExcelFile(filename)
 df = xl.parse(xl.sheet_names[0])
 
-# Drop non-tech sector jobs
+# Drop non tech sector jobs
 df = df.drop(df[df.OCC_CODE != "15-0000"].index)
 # Drop any rows with missing data
 df = df.drop(bls[(bls.A_MEAN == '*') | (bls.JOBS_1000 == '**') | (bls.TOT_EMP == '**')].index)
@@ -159,7 +159,7 @@ Out[1]:
 309  12420                              Austin-Round Rock, TX          3980.0
 193  28140                                 Kansas City, MO-KS          3300.0
 186  33460            Minneapolis-St. Paul-Bloomington, MN-WI          3235.0
-...
+..     ...                                                ...             ...
 ```
 
 ----
@@ -167,7 +167,7 @@ Out[1]:
 ## Lemme throw some plots at ya
 
 ![](img/avg_emp_histo.jpg)
-![](img/avg_emp_x_wage.jpg)
+![](img/avg_emp_x_wage.png)
 
 ----  ----
 
