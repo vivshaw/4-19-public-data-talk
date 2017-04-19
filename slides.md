@@ -76,15 +76,12 @@ Ulterior motive: 'Yay, a chance to revisit my old stomping grounds & build some 
 ...or, a tech recruiter looking to expand your range for talent-hunting?
 
 <div class="fragment" />
-Whichever it may be, having an accurate picture of where tech-sector employment is growing is crucial to the success of this business venture. And I've got the perfect way for you to build this picture: public economic & geographic datasets!
+* Whichever it is, an accurate picture of where tech-sector employment is growing is crucial to the success of this business venture.
+* The perfect way for you to build this picture: public economic & geographic datasets!
 
 ----  ----
 
-# 3. Sorting out our economic data
-
-----
-
-## BLS-OES
+## 3. Sorting out our economic data
 
 The Bureau of Labor Statistics maintains a comprehensive [Occupational Employment Statistics](https://www.bls.gov/oes/home.htm) (OES) program
 * Employment data available broken down by occupational profiles & groups thereof
@@ -175,62 +172,78 @@ Out[1]:
 
 ----  ----
 
-# 4. Publishing at github.io
+# 4. Geographic data
 
 
 ----
 
-## Publishing as github page
+## Mapping with MSAs
 
-A github repo (with `index.html`) can be rendered into a github.io page
+We need to map with MSAs, but there's not really a Python tool that does that.
 
-1. Add remote repo at github.com <br>
-   *(automated in fabsetup task setup.revealjs)*
+Public data to the rescue again!
+* The [US Census Bureau](https://www.census.gov/en.html) provides a dataset of [cartographic boundaries](https://www.census.gov/geo/maps-data/data/cbf/cbf_msa.html) in the form of [shapefiles](https://en.wikipedia.org/wiki/Shapefile).
+* We'll use these to build a map
 
-1. [Configure][20] entry point for github.io page <br>
-   *(manually, select "master branch")*
+----
 
+## Teach me how to QGIS (Data cleaning, round 2)
 
-[20]: https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/
-[1_]: https://theno.github.io/revealjs_template
-[2_]: https://github.com/theno/revealjs_template
+Problem: these shapefiles are huge! A dataset of ZIP code shapefiles is over 1.3 GB. These MSA shapefiles are more reasonable at 30ish MB, but we want something more svelte.
 
+<div class="fragment" />
+* We'll need to use a [geographic information system](https://en.wikipedia.org/wiki/Geographic_information_system) (GIS) like [ArcGIS](https://www.arcgis.com/features/index.html) or [QGIS](http://qgis.org/en/site/) to edit & compress the shapefiles
+
+![](img/qgis.png)
+
+----
+
+## Portable markup for great justice!
+
+Now that we've fixed up our shapefiles, we need them in a format we can actually use.
+
+<div class="fragment" />
+__[geoJSON](http://geojson.org/) to the rescue!__
+* A portable markup format for geographic data & shapes
+* Bindings available for most languages
 
 ----  ----
 
-# 5. Conclusion and Outlook
+# 6. Map Time
 
 ----
 
-## Conclusion
+## Our choropleth options
 
-* Presentations with __reveal.js__ are fancy and nice
-* Writing slides in __Markdown__ is easy
-* __fabric__ is a framework for powerfull setup scripts
-* __fabsetup__ is a collection of fabric tasks
+<div class="fragment" />
+Static
+* R - [choroplethr](https://github.com/trulia/choroplethr)
+* Python - [geopandas](http://geopandas.org/), [cartopy](http://scitools.org.uk/cartopy/)
 
-----
-
-__`fab setup.revealjs`__ (one of this tasks):
-  Creates the boilerplate of your presentation:
-  * Clean basedir (reveal.js codebase hidden in a subdir)
-  * Slides are written in a __Markdown file__
-  * Usefull plugins enabled (eg. __footer, toc, menu__)
-  * Versioning with __git__
-  * Publishing at __github.io__
-
-__`>>just edit the slides.md<<`__  <!-- .element: class="fragment" -->
+<div class="fragment" />
+Dynamic
+* Python - [folium](https://github.com/python-visualization/folium)
+* Javascript - roll-your-own with [leaflet.js](http://leafletjs.com/)
 
 ----
 
-## Outlook
+## Attempt 1: Folium
 
-* Publishing with own webserver
-  * Implement restricted access
-* Custom design
-  * Create themes / corporate design
-* Explore [more plugins][21]
-* [Customize][23] fabsetup task `setup.revealjs`
+[I tried Folium](https://vivshaw.github.io/4-19-public-data-talk/folium-app/).
+
+Pros:
+* It looks quite nice
+* Great if you don't want to learn JS just to make a map app
+
+Cons:
+* Not very interactive by default
+* Fine-tuning is sometimes tough
+
+----
+
+## Even better: Leaflet
+
+Since I know JS already, I decided to make an [even better choropleth](https://vivshaw.github.io/4-19-public-data-talk/leaflet-app/) in Leaflet
 
 ---
 
