@@ -1,8 +1,11 @@
 var map = L.map('map').setView([37.8, -96], 5),
-	grades = [0, 10, 20, 50, 100, 200, 500, 1000];
+	grades = [0, 10, 20, 50, 100, 200, 500, 1000],
+	colors = ['#800026', '#BD0026', '#E31A1C', '#FC4E2A', '#FD8D3C', '#FEB24C', '#FED976', '#FFEDA0'];
+// data range: -1134 - 9514
 
 L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
-    id: 'mapbox.light'
+    id: 'stamen-toner',
+    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>. Employment data data &copy; <a href="https://www.bls.gov/oes/home.htm">Bureau of Labor Statistics</a>'
 }).addTo(map);
 
 // control that shows state info on hover
@@ -24,24 +27,11 @@ info.addTo(map);
 
 // get color depending on employment growth
 function getColor(d) {
-	// d range: -1134 - 9514
-	var colors = ['#800026', '#BD0026', '#E31A1C', '#FC4E2A', '#FD8D3C', '#FEB24C', '#FED976', '#FFEDA0'];
 	for (var i = grades.length - 1; i >= 0; i--) {
 		if (d > grades[i]) return colors[colors.length - 1 - i];
 	}
 
 	return colors[colors.length - 1];
-
-	/*
-	return d > 1000 ? '#800026' :
-			d > 500 ? '#BD0026' :
-			d > 200 ? '#E31A1C' :
-			d > 100 ? '#FC4E2A' :
-			d > 50  ? '#FD8D3C' :
-			d > 20  ? '#FEB24C' :
-			d > 10  ? '#FED976' :
-					  '#FFEDA0';
-					  */
 }
 
 function style(feature) {
@@ -95,8 +85,6 @@ geojson = L.geoJson(msaData, {
 	style: style,
 	onEachFeature: onEachFeature
 }).addTo(map);
-
-map.attributionControl.addAttribution('Population data &copy; <a href="http://census.gov/">US Census Bureau</a>');
 
 var scale = L.control({position: 'bottomright'});
 
