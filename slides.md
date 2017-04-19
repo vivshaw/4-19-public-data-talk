@@ -8,8 +8,8 @@
 created by [vivshaw](https://vivshaw.github.io/) | 2017-04-19 | [online][1] | [src][2]
 
 
-[1]: https://vivshaw.github.io/public-data-talk/
-[2]: https://github.com/vivshaw/public-data-talk/
+[1]: https://vivshaw.github.io/4-19-public-data-talk/
+[2]: https://github.com/vivshaw/4-19-public-data-talk/
 
 ----  ----
 
