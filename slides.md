@@ -35,115 +35,45 @@ created by [vivshaw](https://vivshaw.github.io/) | 2017-04-19 | [online][1] | [s
 
 ----
 
-## The topic at hand
+## On the topic of public data
 
-Initial thought: Public economic datasets - a natural fit for business.
+<div class="fragment" />
+Initial thought: Public economic datasets - a natural fit for business. There's lots of comprehensive, clean data out there with direct business relevance.
+
+<div class="fragment" />
 Ulterior motive: 'Yay, a chance to revisit my old stomping grounds & build something neat!'
 
-Large amounts of pristine data
+<div class="fragment" />
+Where to find it?
 
 * <!-- .element: class="fragment" -->Domestic data
-  * Bureau of Labor Statistics
-  * Federal Reserve
+  * [Bureau of Labor Statistics](https://www.bls.gov/home.htm) - employment, prices, compensation
+  * [Federal Reserve Economic Data (Fred)](https://fred.stlouisfed.org/) -> macro, monetary, financial
+  * [Bureau of Economic Analysis](https://www.bea.gov/) -> macro, trade, regional
 * <!-- .element: class="fragment" -->International data
-  * World Bank
-
-----
-
-## reveal.js: Showroom
-
-Some reveal.js presentations:
-* *"Official"* demo: http://lab.hakim.se/reveal-js
-* http://slid.es/gsklee/functional-programming-in-5-minutes
-* http://www.adidahiya.com/design.html
-* http://slides.drublic.de/awesome-code
-* http://hoebel.net/presentations_archive/saltstack/saltstack.html
-
-More demos: https://github.com/hakimel/reveal.js/wiki/Example-Presentations
-
+  * [World Bank](http://data.worldbank.org/) -> literally everything imaginable, from everywhere imaginable
 
 ----  ----
 
-# 2. fabric and fabsetup
+# 2. Posing our question
 
 ----
 
-# fabric
+# Where are the hottest spots for tech-sector employment in 2016?
 
-> "Fabric is a Python (2.5-2.7) library and command-line tool
-> for streamlining the use of SSH for application deployment
-> or systems administration tasks."
->
-> -- <cite>http://www.fabfile.org/</cite>
+Perhaps you are...
 
 <div class="fragment" />
-
-__`>>shell-deploy-scripts on steroids!<<`__
-
-----
-
-## fab and fabfile.py
-
-* __`fabfile.py`__ contains the fabric tasks
-  * Bash commands _"written"_ in Python (2.5 - 2.7)
-* Command __`fab`__ executes a task
-
-----
-
-example __`fabfile.py`__:
-
-```python
-from fabric.api import env, run, task
-
-@task
-def show_ips():
-    ips = run('/bin/hostname -I')
-    print('IPs of {}:\n  {}'.format(env.host, ips))
-```
+...a startup, looking to avoid the high costs and market saturation of SF or NY?
 
 <div class="fragment" />
-
-__`fab`__ uses the fabfile of the current dir:
-
-```bash
-> ls
-fabfile.py
-```
+...or, an established tech firm looking for locations for a branch office?
 
 <div class="fragment" />
+...or, a tech recruiter looking to expand your range for talent-hunting?
 
-```bash
-> fab show_ips  -H user@example_host
-[example_host] Executing task 'ip_addresses'
-[example_host] run: hostname -I
-[example_host] out: 1.2.3.4
-
-IPs of mobi12.uni.cx:
-  1.2.3.4
-
-  Done.  Disconnecting from example_host... done.
-```
-
-----
-
-# fabsetup
-
-Collection of __fabric tasks__:
-* set up an [owncloud server][7]
-* set up an own android app repository (own [F-Droid server][8])
-* set up a linux desktop:
-  eg. [configure vim, tmux, solarized colors][9] *(dotfiles on steroids!)*
-* set up ...
-* <!-- .element: class="fragment" -->
- __set up everything you need for a *reveal.js* presentation__:
- ```sh
- fab setup.revealjs
- ```
-
-[7]: https://github.com/theno/fabsetup/blob/master/howtos/owncloud.md
-[8]: https://github.com/theno/fabsetup/blob/master/howtos/f-droid-repo.md
-[9]: https://github.com/theno/fabsetup/blob/master/howtos/no-sudo.md
-
+<div class="fragment" />
+Whichever it may be, having an accurate picture of where tech-sector employment is growing is crucial to the success of this business venture. And I've got the perfect way for you to build this picture: public economic & geographic data.
 
 ----  ----
 
