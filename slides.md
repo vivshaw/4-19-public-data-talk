@@ -37,15 +37,15 @@ created by [vivshaw](https://vivshaw.github.io/) | 2017-04-19 | [online][1] | [s
 
 ## The topic at hand
 
-My initial thought: A natural fit for business - public economic datasets.
+Initial thought: Public economic datasets - a natural fit for business.
 Ulterior motive: 'Yay, a chance to revisit my old stomping grounds & build something neat!'
 
 Large amounts of pristine data
 
-* Domestic data
+* <!-- .element: class="fragment" -->Domestic data
   * Bureau of Labor Statistics
   * Federal Reserve
-* International data
+* <!-- .element: class="fragment" -->International data
   * World Bank
 
 ----
