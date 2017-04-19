@@ -7,9 +7,14 @@
 
 created by [vivshaw](https://vivshaw.github.io/) | 2017-04-19 | [online][1] | [src][2]
 
+[folium](3) | [leaflet](4) | [odyssey](5)
+
 
 [1]: https://vivshaw.github.io/4-19-public-data-talk/
 [2]: https://github.com/vivshaw/4-19-public-data-talk/
+[3]: https://vivshaw.github.io/4-19-public-data-talk/folium-app/
+[4]: https://vivshaw.github.io/4-19-public-data-talk/leaflet-app/
+[5]: https://vivshaw.github.io/4-19-public-data-talk/odyssey/
 
 ----  ----
 
