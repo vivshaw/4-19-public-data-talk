@@ -13,19 +13,25 @@ html, body {
 
 .info {
 	padding: 6px 8px;
-	font: 14px/16px Arial, Helvetica, sans-serif;
 	background: white;
 	background: rgba(255,255,255,0.8);
 	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	font-family: apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
 }
 .info h4 {
 	margin: 0 0 5px;
-	color: #777;
+	color: #111;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #666;
+}
+
+.info h4 small {
+	font-weight: 300;
 }
 
 .legend {
 	text-align: left;
-	line-height: 18px;
+	font-family: apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
 	color: #555;
 }
 .legend i {

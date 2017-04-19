@@ -1,56 +1,57 @@
-var map = L.map('map').setView([37.8, -96], 5),
-	grades = [0, 10, 20, 50, 100, 200, 500, 1000],
+var map = L.map('map', {attributionControl: false}).setView([37.8, -96], 5),
+	grades = [-1134, -400, -50, 1, 2500, 4000, 5500, 9514],
 	colors = ['#800026', '#BD0026', '#E31A1C', '#FC4E2A', '#FD8D3C', '#FEB24C', '#FED976', '#FFEDA0'];
 // data range: -1134 - 9514
 
+var positiveColorScale = d3.scaleSequential(d3.interpolateBlues).domain([0, 9514])
+var negativeColorScale = d3.scaleSequential(d3.interpolateReds).domain([0, -1134])
+
 L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
     id: 'stamen-toner',
-    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>. Employment data data &copy; <a href="https://www.bls.gov/oes/home.htm">Bureau of Labor Statistics</a>'
+    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>. Employment data &copy; <a href="https://www.bls.gov/oes/home.htm">Bureau of Labor Statistics</a>'
 }).addTo(map);
 
-// control that shows state info on hover
-var info = L.control();
+L.control.attribution({position: 'topright'}).addTo(map);
 
-info.onAdd = function (map) {
+// map control that shows MSA info on hover
+var legend = L.control({position: 'bottomleft'});
+
+legend.onAdd = function (map) {
 	this._div = L.DomUtil.create('div', 'info');
 	this.update();
 	return this._div;
 };
 
-info.update = function (props) {
-	this._div.innerHTML = '<h4>US Tech Industry Growth</h4>' +  (props ?
-		'<b>' + props.NAME + '</b><br />' + props.growth + ' % / yr'
-		: 'Hover over a state');
+legend.update = function (props) {
+	this._div.innerHTML = '<h4 class="display-4">Tech Job Growth <small class="text-muted">(3-year avg.)</small></h4>' +  (props ?
+		'<div class="lead"><b>' + props.NAME + '</b><br /><b>' + props.growth + '</b> positions ' + ((props.growth >= 0) ? 'added' : 'lost') + '</div>'
+		: '<div class="lead">Hover over an MSA for info<br />&nbsp</div>');
 };
 
-info.addTo(map);
+legend.addTo(map);
 
 // get color depending on employment growth
 function getColor(d) {
-	for (var i = grades.length - 1; i >= 0; i--) {
-		if (d > grades[i]) return colors[colors.length - 1 - i];
-	}
-
-	return colors[colors.length - 1];
+	return d >= 0 ? positiveColorScale(d) : negativeColorScale(d)
 }
 
 function style(feature) {
 	return {
-		weight: 2,
+		weight: 1,
 		opacity: 1,
-		color: 'white',
-		dashArray: '3',
+		color: 'gray',
+		dashArray: '',
 		fillOpacity: 0.7,
 		fillColor: getColor(feature.properties.growth)
 	};
 }
 
-function legendInfo(e) {
+function setLegendInfo(e) {
 	var layer = e.target;
 
 	layer.setStyle({
-		weight: 5,
-		color: '#666',
+		weight: 3,
+		color: 'white',
 		dashArray: '',
 		fillOpacity: 0.7
 	});
@@ -59,14 +60,14 @@ function legendInfo(e) {
 		layer.bringToFront();
 	}
 
-	info.update(layer.feature.properties);
+	legend.update(layer.feature.properties);
 }
 
 var geojson;
 
 function resetLegendInfo(e) {
 	geojson.resetStyle(e.target);
-	info.update();
+	legend.update();
 }
 
 function zoomToFeature(e) {
@@ -75,7 +76,7 @@ function zoomToFeature(e) {
 
 function onEachFeature(feature, layer) {
 	layer.on({
-		mouseover: legendInfo,
+		mouseover: setLegendInfo,
 		mouseout: resetLegendInfo,
 		click: zoomToFeature
 	});
@@ -86,6 +87,8 @@ geojson = L.geoJson(msaData, {
 	onEachFeature: onEachFeature
 }).addTo(map);
 
+
+// color scale control for choropleth
 var scale = L.control({position: 'bottomright'});
 
 scale.onAdd = function (map) {
