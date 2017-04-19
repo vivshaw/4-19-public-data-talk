@@ -35,23 +35,32 @@ def msa_data_from_xls(filename):
         
     return (msa, zips)
 
-def load_bls(filename):
+## Load up a BLS Excel worksheet, import it to Pandas, and do some cleaning
+def load_bls_excel(filename):
     xl = pd.ExcelFile(filename)
     sheet = xl.sheet_names[0]
     df = xl.parse(sheet)
-    to_keep = ['AREA', 'AREA_NAME', 'TOT_EMP', 'JOBS_1000', 'A_MEAN']
-    to_convert = ['TOT_EMP', 'JOBS_1000', 'A_MEAN']
+    
+    # Drop non-tech sector jobs
     bls = df.drop(df[df.OCC_CODE != "15-0000"].index)
+    # Drop any rows with missing data
     bls = bls.drop(bls[(bls.A_MEAN == '*') | (bls.JOBS_1000 == '**') | (bls.TOT_EMP == '**')].index)
+    
+    # Convert some columns to numeric datatypes
+    to_convert = ['TOT_EMP', 'JOBS_1000', 'A_MEAN']
     bls[to_convert] = bls[to_convert].apply(pd.to_numeric)
-    return bls[to_keep]
+    
+    # Return only chosen columns
+    to_keep = ['AREA', 'AREA_NAME', 'TOT_EMP', 'JOBS_1000', 'A_MEAN']
+    bls = bls[to_keep]
+    return bls
 
 # Get dictionaries to convert zip to MSA or MSA to zip
 msa_to_zips, zip_to_msa = msa_data_from_xls('data/fs11_gpci_by_msa-zip.xls')
 
 # Load up our bls data from xls files
 datafiles = ['data/MSA_M2016_dl.xlsx', 'data/MSA_M2015_dl.xlsx', 'data/MSA_M2014_dl.xlsx']
-bls_data = list(map(lambda x: (x[10:14], load_bls(x)), datafiles))
+bls_data = list(map(lambda x: (x[10:14], load_bls_excel(x)), datafiles))
 
 # Rename our columns by year
 rename_column = lambda x: x[1].rename(columns={'TOT_EMP': x[0] + '_TOT_EMP',
