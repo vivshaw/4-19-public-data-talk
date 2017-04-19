@@ -43,8 +43,9 @@ Initial thought: Public economic datasets - a natural fit for business. There's 
 <div class="fragment" />
 Ulterior motive: 'Yay, a chance to revisit my old stomping grounds & build something neat!'
 
-<div class="fragment" />
-Where to find it?
+----
+
+## Where to find economic data?
 
 * <!-- .element: class="fragment" -->Domestic data
   * [Bureau of Labor Statistics](https://www.bls.gov/home.htm) - employment, prices, compensation
@@ -73,48 +74,53 @@ Perhaps you are...
 ...or, a tech recruiter looking to expand your range for talent-hunting?
 
 <div class="fragment" />
-Whichever it may be, having an accurate picture of where tech-sector employment is growing is crucial to the success of this business venture. And I've got the perfect way for you to build this picture: public economic & geographic data.
+Whichever it may be, having an accurate picture of where tech-sector employment is growing is crucial to the success of this business venture. And I've got the perfect way for you to build this picture: public economic & geographic datasets!
 
 ----  ----
 
-# 3. fab setup.revealjs
+# 3. Sorting out our economic data
 
 ----
 
-## A reveal.js Template
+## BLS-OES
 
-boilerplate for getting started on a nice reveal.js presentation:
-* reveal.js code installed (comes with built-in plugins)
-* Additional reveal.js plugins installed
-* __`index.html`__ prepared accordingly
-* All slides are defined in __`slides.md`__
+The Bureau of Labor Statistics maintains a comprehensive [Occupational Employment Statistics](https://www.bls.gov/oes/home.htm) (OES) program
+* Employment data available broken down by occupational profiles & groups thereof
+* Temporal granularity: yearly (released each Spring)
+* Spatial granularity: national, state, metropolitan statistical area (MSA)
+* We'll use MSAs, as we want the most granular understanding of where the job growth is at!
 
 ----
 
-## Set It Up
+## Scrub-a-dub-dub, data cleaning time!
 
-* install __fabsetup__:
-```sh
-sudo apt-get install  git  fabric              #
-mkdir -p ~/repos  &&  cd ~/repos
-git clone https://github.com/theno/fabsetup
+We'll use Pandas, because it's awesome.
+
+```
+xl = pd.ExcelFile(filename)
+df = xl.parse(xl.sheet_names[0])
+
+# Drop non-tech sector jobs
+bls = df.drop(df[df.OCC_CODE != "15-0000"].index)
+# Drop any rows with missing data
+bls = bls.drop(bls[(bls.A_MEAN == '*') | (bls.JOBS_1000 == '**') | (bls.TOT_EMP == '**')].index)
+
+# Return only chosen columns
+return bls['AREA', 'AREA_NAME', 'TOT_EMP', 'JOBS_1000', 'A_MEAN']
 ```
 
-* run fabric task __`setup.revealjs`__:
-```sh
-cd ~/repos/fabsetup
-fab setup.revealjs  -H localhost
-```
-
 ----
 
-## fab setup.revealjs
+## Merge, merge, merge
 
-*Asks for:*
- * Presentation base directory
- * Title
- * Sub-title
- * Short description
+We'll grab the past three years of OES data and merge 'em together. Pandas makes this as easy as a SQL join:
+
+```
+from functools import reduce
+
+inner_join_by_area = lambda x, y: pd.merge(x, y, on='AREA', how='inner')
+bls_merged = reduce(inner_join_by_area, bls_data)
+```
 
 ----
 
