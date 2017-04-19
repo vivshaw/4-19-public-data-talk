@@ -107,6 +107,10 @@ df = df.drop(df[df.OCC_CODE != "15-0000"].index)
 # Drop any rows with missing data
 df = df.drop(bls[(bls.A_MEAN == '*') | (bls.JOBS_1000 == '**') | (bls.TOT_EMP == '**')].index)
 
+# Convert some columns to numeric datatypes
+to_convert = ['TOT_EMP', 'JOBS_1000', 'A_MEAN']
+bls[to_convert] = bls[to_convert].apply(pd.to_numeric)
+
 # Return only chosen columns
 return df['AREA', 'AREA_NAME', 'TOT_EMP', 'JOBS_1000', 'A_MEAN']
 ```
