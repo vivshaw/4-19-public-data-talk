@@ -167,13 +167,12 @@ Out[1]:
 
 ## Lemme throw some plots at ya
 
-![](img/avg_emp_histo.jpg)
-![](img/avg_emp_x_wage.png)
+![job growth histogram](img/avg_emp_histo.png)
+![job growth x mean wage](img/avg_emp_x_wage.png)
 
 ----  ----
 
 # 4. Geographic data
-
 
 ----
 
@@ -206,6 +205,8 @@ Now that we've fixed up our shapefiles, we need them in a format we can actually
 __[geoJSON](http://geojson.org/) to the rescue!__
 * A portable markup format for geographic data & shapes
 * Bindings available for most languages
+
+We can convert shapefiles to geoJSON using the [Geospatial Data Abstraction Library](http://www.gdal.org/index.html)'s cli tool `ogr2ogr`
 
 ----  ----
 
@@ -243,47 +244,27 @@ Cons:
 
 ## Even better: Leaflet
 
-Since I know JS already, I decided to make an [even better choropleth](https://vivshaw.github.io/4-19-public-data-talk/leaflet-app/) in Leaflet
+Since I know JS already, I decided to make an [even better choropleth](https://vivshaw.github.io/4-19-public-data-talk/leaflet-app/) in Leaflet.
+
+Pros:
+* Incredibly customizable
+* Web native
+* Super slick looking
+
+Cons:
+* You have to be a web developer
 
 ---
 
-Alternative:
+## Telling the story with [odyssey.js](https://cartodb.github.io/odyssey.js/)
 
-[prez][22] -- *"Opiniated Reveal slideshow generator with nice
-PDF output and ability to treat notes as first-class content."*
+(Data journalists, this one's for you!)
 
-[21]: https://github.com/hakimel/reveal.js/wiki/Plugins,-Tools-and-Hardware
-[22]: https://github.com/byteclubfr/prez
-[23]: https://github.com/theno/fabsetup/blob/master/howtos/fabsetup_custom.md
+Once you've drawn some conclusions, odyssey.js will let you make a map [into an interactive story map](https://vivshaw.github.io/4-19-public-data-talk/odyssey/).
 
 ----
 
-## References
-
-* reveal.js: [http://lab.hakim.se/reveal-js](http://lab.hakim.se/reveal-js/)
-  * at github: [https://github.com/hakimel/reveal.js](https://github.com/hakimel/reveal.js)
-
----
-
-* markdown: [https://daringfireball.net/projects/markdown](https://daringfireball.net/projects/markdown/)
-  * cheatsheet: [https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
-
----
-
-* fabric: [http://www.fabfile.org](http://www.fabfile.org/)
-  * at github: [https://github.com/fabric/fabric](https://github.com/fabric/fabric)
-
----
-
-* fabsetup: [https://github.com/theno/fabsetup](https://github.com/theno/fabsetup)
-  * revealjs [howto](https://github.com/theno/fabsetup/blob/master/howtos/revealjs.md)
-
-
-----  ----
-
 <!-- .slide: data-state="no-toc-progress" --> <!-- don't show toc progress bar on this slide -->
 
-### *Thank You for Your attention!*
+### *Thanks for your time, everyone!*
 <!-- .element: class="no-toc-progress" -->
-
-![](img/thanks.jpg)
