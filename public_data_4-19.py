@@ -75,6 +75,7 @@ bls_merged = reduce(inner_join_by_area, bls_data)
 
 # Keep only TOT_EMP data, find growth rates, and average them
 tot_emp = bls_merged[['AREA', 'AREA_NAME_x', '2016_TOT_EMP', '2015_TOT_EMP', '2014_TOT_EMP']]
+tot_emp['A_MEAN'] = bls_merged['2016_A_MEAN']
 tot_emp['2016_EMP_GROWTH'] = tot_emp['2016_TOT_EMP'] - tot_emp['2015_TOT_EMP']
 tot_emp['2015_EMP_GROWTH'] = tot_emp['2015_TOT_EMP'] - tot_emp['2014_TOT_EMP']
 tot_emp['AVG_EMP_GROWTH'] = (tot_emp['2016_EMP_GROWTH'] + tot_emp['2015_EMP_GROWTH']) / 2
@@ -120,19 +121,28 @@ def dictify_by_zip(data):
     
     for i, row in data.iterrows():
         for zip in row.ZIPS:
-            zip_to_avg[zip] = zip_to_avg.get(zip, 0) + row.AVG_EMP_GROWTH
+             growth = zip_to_avg.get(zip, [0])[0] + row.AVG_EMP_GROWTH
+             wage = row.A_MEAN
+             zip_to_avg[zip] = [growth, wage]
             
     return zip_to_avg
     
 zip_to_avg_growth = dictify_by_zip(tot_emp)
 
 msa_to_avg_growth = {}
+msa_to_wage = {}
 for k, v in zip_to_avg_growth.items():
-    msa_to_avg_growth[zip_to_msa[k]] = v
+    msa_to_avg_growth[zip_to_msa[k]] = v[0]
+    msa_to_wage[zip_to_msa[k]] = v[1]
     
 msaframe = pd.Series(msa_to_avg_growth, name='AVG_EMP_GROWTH')
 msaframe.index.name = 'AREA'
 msaframe = msaframe.reset_index()
+
+wageframe = pd.Series(msa_to_wage, name='WAGE')
+wageframe.index.name = 'AREA'
+wageframe = wageframe.reset_index()
+msaframe['WAGE'] = wageframe['WAGE']
 
 geo_path = r'data/msa.json'
 geojson = pygeoj.load(filepath=geo_path)
@@ -150,10 +160,12 @@ for x in range(len(geojson)):
         msa = fixes[msa]
     if msa in msa_to_avg_growth:
         growth = msa_to_avg_growth[msa]
+        wage = msa_to_wage[msa]
         for key in drop:
             if key in feature.properties:
                 del geojson[x].properties[key]
         geojson[x].properties['growth'] = growth
+        geojson[x].properties['wage'] = wage
     else:
         idx_to_delete += [x]
         missing_msas += [feature.properties['CBSAFP']]
